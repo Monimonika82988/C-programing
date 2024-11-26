@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <string.h>
+
+int lengthOfLongestSubstring(char* s) {
+    int n = strlen(s);
+    if (n == 0) return 0;
+
+    int lastIndex[256]; // Array to store the last index of characters
+    for (int i = 0; i < 256; i++) {
+        lastIndex[i] = -1; // Initialize all characters to -1 (not seen yet)
+    }
+
+    int maxLength = 0;
+    int left = 0; // Left pointer for the sliding window
+
+    // Iterate over the string with right pointer
+    for (int right = 0; right < n; right++) {
+        char currentChar = s[right];
+        
+        // If the character has been seen and its index is within the current window
+        if (lastIndex[currentChar] >= left) {
+            // Move the left pointer to the right of the last occurrence of the character
+            left = lastIndex[currentChar] + 1;
+        }
+        
+        // Update the last index of the current character
+        lastIndex[currentChar] = right;
+        
+        // Calculate the length of the current window and update the maximum length
+        int currentLength = right - left + 1;
+        if (currentLength > maxLength) {
+            maxLength = currentLength;
+        }
+    }
+
+    return maxLength;
+}
+
+int argc() {
+    char s[] = "abcabcbb";
+    printf("Length of the longest substring without repeating characters: %d\n", lengthOfLongestSubstring(s));
+    return 0;
+}
